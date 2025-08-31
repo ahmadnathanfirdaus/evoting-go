@@ -1,0 +1,71 @@
+{{template "base.html" .}}
+
+{{define "title"}}Edit Election - E-Voting System{{end}}
+
+{{define "content"}}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-edit me-2"></i>Edit Election
+                </h4>
+            </div>
+            <div class="card-body">
+                {{if .Error}}
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>{{.Error}}
+                </div>
+                {{end}}
+
+                <form method="POST" action="/admin/superadmin/elections/{{.Election.ID}}/edit" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Election Title *</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{.Election.Title}}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">{{.Election.Description}}</textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Start Date & Time *</label>
+                                <input type="datetime-local" class="form-control" id="start_date" name="start_date" 
+                                       value="{{.Election.StartDate.Format "2006-01-02T15:04"}}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">End Date & Time *</label>
+                                <input type="datetime-local" class="form-control" id="end_date" name="end_date" 
+                                       value="{{.Election.EndDate.Format "2006-01-02T15:04"}}" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status *</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="draft" {{if eq .Election.Status "draft"}}selected{{end}}>Draft</option>
+                            <option value="active" {{if eq .Election.Status "active"}}selected{{end}}>Active</option>
+                            <option value="completed" {{if eq .Election.Status "completed"}}selected{{end}}>Completed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/admin/superadmin/elections" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Election
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

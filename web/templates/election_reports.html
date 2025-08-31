@@ -1,0 +1,206 @@
+{{template "admin_base.html" .}}
+
+{{define "title"}}Election Reports - {{.Election.Title}}{{end}}
+
+{{define "breadcrumb"}}
+<li class="breadcrumb-item"><a href="/admin/admin/dashboard">Dashboard</a></li>
+<li class="breadcrumb-item"><a href="/admin/admin/elections">Elections</a></li>
+<li class="breadcrumb-item active">{{.Election.Title}}</li>
+<li class="breadcrumb-item active">Reports</li>
+{{end}}
+
+{{define "content"}}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="fas fa-chart-bar me-2"></i>Election Reports</h2>
+        <p class="text-muted mb-0">{{.Election.Title}}</p>
+    </div>
+    <button onclick="window.print()" class="btn btn-outline-primary">
+        <i class="fas fa-print me-2"></i>Print Report
+    </button>
+</div>
+
+<!-- Election Navigation -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="btn-group" role="group">
+            <a href="/admin/admin/elections/{{.Election.ID}}/candidates" class="btn btn-outline-secondary">
+                <i class="fas fa-users me-1"></i>Candidates
+            </a>
+            <a href="/admin/admin/elections/{{.Election.ID}}/tokens" class="btn btn-outline-secondary">
+                <i class="fas fa-ticket-alt me-1"></i>Tokens
+            </a>
+            <a href="/admin/admin/elections/{{.Election.ID}}/votes" class="btn btn-outline-secondary">
+                <i class="fas fa-vote-yea me-1"></i>Votes
+            </a>
+            <a href="/admin/admin/elections/{{.Election.ID}}/reports" class="btn btn-primary">
+                <i class="fas fa-chart-bar me-1"></i>Reports
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Overview -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h3>{{.Stats.TotalCandidates}}</h3>
+                <p class="mb-0">Candidates</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h3>{{.Stats.TotalTokens}}</h3>
+                <p class="mb-0">Total Tokens</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h3>{{.Stats.TotalVotes}}</h3>
+                <p class="mb-0">Votes Cast</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h3>{{if gt .Stats.TotalTokens 0}}{{printf "%.1f%%" (div (mul .Stats.TotalVotes 100) .Stats.TotalTokens)}}{{else}}0%{{end}}</h3>
+                <p class="mb-0">Turnout</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vote Results -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Election Results</h5>
+    </div>
+    <div class="card-body">
+        {{if .VoteCounts}}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Candidate</th>
+                        <th>Votes</th>
+                        <th>Percentage</th>
+                        <th>Visual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{$totalVotes := .Stats.TotalVotes}}
+                    {{range $index, $candidate := .VoteCounts}}
+                    <tr>
+                        <td>
+                            {{if eq $index 0}}
+                            <i class="fas fa-crown text-warning"></i> #{{add $index 1}}
+                            {{else}}
+                            #{{add $index 1}}
+                            {{end}}
+                        </td>
+                        <td><strong>{{.CandidateName}}</strong></td>
+                        <td>{{.VoteCount}}</td>
+                        <td>
+                            {{if gt $totalVotes 0}}
+                            {{printf "%.1f%%" (div (mul .VoteCount 100) $totalVotes)}}
+                            {{else}}
+                            0%
+                            {{end}}
+                        </td>
+                        <td>
+                            <div class="progress" style="height: 25px;">
+                                {{$percentage := 0}}
+                                {{if gt $totalVotes 0}}
+                                {{$percentage = div (mul .VoteCount 100) $totalVotes}}
+                                {{end}}
+                                <div class="progress-bar {{if eq $index 0}}bg-success{{else if eq $index 1}}bg-info{{else if eq $index 2}}bg-warning{{else}}bg-secondary{{end}}"
+                                     role="progressbar" style="width: {{$percentage}}%">
+                                    {{if gt .VoteCount 0}}{{.VoteCount}}{{end}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <div class="text-center py-4">
+            <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No Votes Cast Yet</h5>
+            <p class="text-muted">Results will appear here once voting begins.</p>
+        </div>
+        {{end}}
+    </div>
+</div>
+
+<!-- Election Details -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Election Details</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <tr>
+                        <td><strong>Title:</strong></td>
+                        <td>{{.Election.Title}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Description:</strong></td>
+                        <td>{{.Election.Description}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Status:</strong></td>
+                        <td>
+                            {{if eq .Election.Status "draft"}}
+                            <span class="badge bg-secondary">Draft</span>
+                            {{else if eq .Election.Status "active"}}
+                            <span class="badge bg-success">Active</span>
+                            {{else if eq .Election.Status "completed"}}
+                            <span class="badge bg-primary">Completed</span>
+                            {{end}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <tr>
+                        <td><strong>Start Date:</strong></td>
+                        <td>{{.Election.StartDate.Format "2006-01-02 15:04"}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>End Date:</strong></td>
+                        <td>{{.Election.EndDate.Format "2006-01-02 15:04"}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Report Generated:</strong></td>
+                        <td>Just now</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    .btn, .card-header .btn-group, nav, footer {
+        display: none !important;
+    }
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+}
+</style>
+{{end}}

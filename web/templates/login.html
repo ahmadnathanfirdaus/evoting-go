@@ -1,0 +1,102 @@
+{{template "base.html" .}}
+
+{{define "title"}}Login - E-Voting System{{end}}
+
+{{define "extra_css"}}
+<link href="/static/css/public.css" rel="stylesheet">
+{{end}}
+
+{{define "content"}}
+<div class="container">
+    <div class="login-container">
+        <div class="login-card fade-in-up">
+        <div class="login-header">
+            <i class="fas fa-sign-in-alt fs-1 mb-3"></i>
+            <h4>Administrator Login</h4>
+            <p class="mb-0 opacity-75">Access the admin dashboard</p>
+        </div>
+
+        <div class="login-body">
+            {{if .Error}}
+            <div class="alert-modern alert-danger-modern">
+                <i class="fas fa-exclamation-triangle me-2"></i>{{.Error}}
+            </div>
+            {{end}}
+
+            <form method="POST" action="/login" id="loginForm">
+                <div class="form-group-modern">
+                    <label for="username" class="form-label-modern">Username</label>
+                    <div class="input-group-modern">
+                        <i class="input-group-icon fas fa-user"></i>
+                        <input type="text" class="form-control-modern" id="username" name="username" placeholder="Enter your username" required>
+                    </div>
+                </div>
+
+                <div class="form-group-modern">
+                    <label for="password" class="form-label-modern">Password</label>
+                    <div class="input-group-modern">
+                        <i class="input-group-icon fas fa-lock"></i>
+                        <input type="password" class="form-control-modern" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-modern">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login to Dashboard
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <a href="/" class="text-decoration-none text-muted">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Demo Credentials Card -->
+    <div class="card-modern mt-4 fade-in" style="max-width: 400px; margin: 0 auto;">
+        <div class="card-body text-center p-4">
+            <h6 class="fw-bold mb-3">
+                <i class="fas fa-info-circle text-info me-2"></i>Demo Credentials
+            </h6>
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="p-3 bg-light rounded">
+                        <strong class="text-primary">Super Admin</strong><br>
+                        <small class="text-muted">Username:</small> <code>superadmin</code><br>
+                        <small class="text-muted">Password:</small> <code>password</code>
+                    </div>
+                </div>
+            </div>
+            <p class="text-muted small mt-3 mb-0">
+                <i class="fas fa-shield-alt me-1"></i>
+                Please change default credentials in production
+            </p>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "extra_js"}}
+<script>
+// Add form validation and enhancements
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (!username || !password) {
+        e.preventDefault();
+        showNotification('Please fill in all fields', 'warning');
+        return false;
+    }
+});
+
+// Add enter key support
+document.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('loginForm').submit();
+    }
+});
+</script>
+{{end}}

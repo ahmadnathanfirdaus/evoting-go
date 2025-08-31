@@ -1,0 +1,120 @@
+{{template "admin_base.html" .}}
+
+{{define "title"}}Admin Dashboard - E-Voting System{{end}}
+
+{{define "breadcrumb"}}
+<li class="breadcrumb-item active">Dashboard</li>
+{{end}}
+
+{{define "content"}}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</h2>
+    <span class="badge bg-success fs-6">{{.User.Username}}</span>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{.Stats.assigned_elections}}</h4>
+                        <p class="mb-0">Assigned Elections</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-poll fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{.Stats.active_elections}}</h4>
+                        <p class="mb-0">Active Elections</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-play-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- My Elections -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-list me-2"></i>My Elections</h5>
+    </div>
+    <div class="card-body">
+        {{if .Elections}}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Period</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Elections}}
+                    <tr>
+                        <td>
+                            <strong>{{.Title}}</strong>
+                            {{if .Description}}
+                            <br><small class="text-muted">{{.Description}}</small>
+                            {{end}}
+                        </td>
+                        <td>
+                            {{if eq .Status "draft"}}
+                            <span class="badge bg-secondary">Draft</span>
+                            {{else if eq .Status "active"}}
+                            <span class="badge bg-success">Active</span>
+                            {{else if eq .Status "completed"}}
+                            <span class="badge bg-primary">Completed</span>
+                            {{end}}
+                        </td>
+                        <td>
+                            <small>
+                                {{.StartDate.Format "2006-01-02 15:04"}} - 
+                                {{.EndDate.Format "2006-01-02 15:04"}}
+                            </small>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/admin/admin/elections/{{.ID}}/candidates" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-users me-1"></i>Candidates
+                                </a>
+                                <a href="/admin/admin/elections/{{.ID}}/tokens" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-ticket-alt me-1"></i>Tokens
+                                </a>
+                                <a href="/admin/admin/elections/{{.ID}}/votes" class="btn btn-sm btn-outline-info">
+                                    <i class="fas fa-vote-yea me-1"></i>Votes
+                                </a>
+                                <a href="/admin/admin/elections/{{.ID}}/reports" class="btn btn-sm btn-outline-warning">
+                                    <i class="fas fa-chart-bar me-1"></i>Reports
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <div class="text-center py-4">
+            <i class="fas fa-poll fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No Elections Assigned</h5>
+            <p class="text-muted">Contact the super admin to get assigned to elections.</p>
+        </div>
+        {{end}}
+    </div>
+</div>
+{{end}}

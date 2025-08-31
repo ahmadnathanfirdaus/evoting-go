@@ -1,0 +1,146 @@
+{{template "base.html" .}}
+
+{{define "title"}}Vote - {{.Election.Title}}{{end}}
+
+{{define "extra_css"}}
+<link href="/static/css/public.css" rel="stylesheet">
+{{end}}
+
+{{define "content"}}
+<div class="vote-container">
+    <div class="vote-card">
+        <div class="card-modern fade-in-up">
+            <div class="card-header text-center">
+                <i class="fas fa-vote-yea fs-1 mb-3"></i>
+                <h4 class="fw-bold">{{.Election.Title}}</h4>
+                <p class="mb-0 opacity-75">{{.Election.Description}}</p>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="alert-modern alert-info-modern mb-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Important:</strong> You can only vote once. Please review your choice carefully before submitting.
+                </div>
+
+                <form method="POST" action="/vote" id="voteForm">
+                    <input type="hidden" name="token" value="{{.Token}}">
+
+                    <h5 class="fw-bold mb-4 text-center">Select Your Candidate</h5>
+
+                    <div class="candidates-list">
+                        {{range .Candidates}}
+                        <div class="candidate-option" onclick="selectCandidate(this)">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="candidate_id" value="{{.ID}}" class="candidate-radio" id="candidate_{{.ID}}">
+                                <div class="candidate-info flex-grow-1">
+                                    <h5 class="mb-1">{{.Name}}</h5>
+                                    <p class="mb-0">{{.Description}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn-modern">
+                            <i class="fas fa-check me-2"></i>Submit My Vote
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <a href="/vote" class="text-decoration-none text-muted">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Token Entry
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voting Security Info -->
+        <div class="row g-3 mt-4">
+            <div class="col-md-3">
+                <div class="card-modern text-center p-3">
+                    <i class="fas fa-lock text-success mb-2"></i>
+                    <h6 class="fw-bold mb-1">Secure</h6>
+                    <small class="text-muted">Encrypted voting</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-modern text-center p-3">
+                    <i class="fas fa-user-secret text-primary mb-2"></i>
+                    <h6 class="fw-bold mb-1">Anonymous</h6>
+                    <small class="text-muted">Identity protected</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-modern text-center p-3">
+                    <i class="fas fa-clock text-warning mb-2"></i>
+                    <h6 class="fw-bold mb-1">One Time</h6>
+                    <small class="text-muted">Single use token</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-modern text-center p-3">
+                    <i class="fas fa-check-circle text-info mb-2"></i>
+                    <h6 class="fw-bold mb-1">Verified</h6>
+                    <small class="text-muted">Vote validation</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "extra_js"}}
+<script>
+function selectCandidate(element) {
+    // Remove selected class from all candidates
+    document.querySelectorAll('.candidate-option').forEach(opt => {
+        opt.classList.remove('selected');
+    });
+
+    // Add selected class to clicked candidate
+    element.classList.add('selected');
+
+    // Check the radio button
+    const radio = element.querySelector('input[type="radio"]');
+    if (radio) {
+        radio.checked = true;
+    }
+}
+
+// Enhanced vote form validation
+document.getElementById('voteForm').addEventListener('submit', function(e) {
+    const selectedCandidate = document.querySelector('input[name="candidate_id"]:checked');
+    if (!selectedCandidate) {
+        e.preventDefault();
+        showNotification('Please select a candidate before submitting your vote.', 'warning');
+        return false;
+    }
+
+    const candidateName = selectedCandidate.closest('.candidate-option').querySelector('h5').textContent;
+    if (!confirm(`Are you sure you want to vote for "${candidateName}"?\n\nThis action cannot be undone and your token will be used.`)) {
+        e.preventDefault();
+        return false;
+    }
+
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
+});
+
+// Initialize candidate selection
+document.querySelectorAll('input[name="candidate_id"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        document.querySelectorAll('.candidate-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+
+        if (this.checked) {
+            this.closest('.candidate-option').classList.add('selected');
+        }
+    });
+});
+</script>
+{{end}}

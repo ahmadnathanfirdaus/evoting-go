@@ -1,0 +1,116 @@
+{{template "base.html" .}}
+
+{{define "title"}}Enter Voting Token - E-Voting System{{end}}
+
+{{define "extra_css"}}
+<link href="/static/css/public.css" rel="stylesheet">
+{{end}}
+
+{{define "content"}}
+<div class="vote-container">
+    <div class="vote-card">
+        <div class="card-modern fade-in-up">
+            <div class="card-header text-center">
+                <i class="fas fa-ticket-alt fs-1 mb-3"></i>
+                <h4 class="fw-bold">Enter Voting Token</h4>
+                <p class="mb-0 opacity-75">Access your secure ballot</p>
+            </div>
+
+            <div class="card-body p-4">
+                {{if .Error}}
+                <div class="alert-modern alert-danger-modern">
+                    <i class="fas fa-exclamation-triangle me-2"></i>{{.Error}}
+                </div>
+                {{end}}
+
+                <div class="text-center mb-4">
+                    <div class="card-modern p-4 bg-light">
+                        <i class="fas fa-info-circle text-info fs-4 mb-3"></i>
+                        <h6 class="fw-bold mb-2">How to Get Your Token</h6>
+                        <p class="text-muted small mb-0">
+                            Your unique voting token should be provided by the election administrator.
+                            Each token can only be used once and ensures your vote remains anonymous.
+                        </p>
+                    </div>
+                </div>
+
+                <form method="GET" action="/vote" id="tokenForm">
+                    <div class="form-group-modern">
+                        <label for="token" class="form-label-modern">Voting Token</label>
+                        <div class="input-group-modern">
+                            <i class="input-group-icon fas fa-key"></i>
+                            <input type="text" class="form-control-modern" id="token" name="token" placeholder="Enter your unique voting token" required>
+                        </div>
+                        <small class="text-muted mt-2 d-block">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Your token is encrypted and secure
+                        </small>
+                    </div>
+
+                    <button type="submit" class="btn-modern">
+                        <i class="fas fa-arrow-right me-2"></i>Access Ballot
+                    </button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <a href="/" class="text-decoration-none text-muted">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Features -->
+        <div class="row g-3 mt-4">
+            <div class="col-md-4">
+                <div class="card-modern text-center p-3">
+                    <i class="fas fa-lock text-success mb-2"></i>
+                    <h6 class="fw-bold mb-1">Secure</h6>
+                    <small class="text-muted">End-to-end encryption</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-modern text-center p-3">
+                    <i class="fas fa-user-secret text-primary mb-2"></i>
+                    <h6 class="fw-bold mb-1">Anonymous</h6>
+                    <small class="text-muted">Your identity is protected</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-modern text-center p-3">
+                    <i class="fas fa-check-circle text-info mb-2"></i>
+                    <h6 class="fw-bold mb-1">Verified</h6>
+                    <small class="text-muted">Every vote is validated</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "extra_js"}}
+<script>
+// Token form validation
+document.getElementById('tokenForm').addEventListener('submit', function(e) {
+    const token = document.getElementById('token').value.trim();
+
+    if (!token) {
+        e.preventDefault();
+        showNotification('Please enter your voting token', 'warning');
+        return false;
+    }
+
+    if (token.length < 8) {
+        e.preventDefault();
+        showNotification('Invalid token format. Please check your token and try again.', 'error');
+        return false;
+    }
+});
+
+// Auto-format token input (optional)
+document.getElementById('token').addEventListener('input', function(e) {
+    // Remove any non-alphanumeric characters and convert to uppercase
+    this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+});
+</script>
+{{end}}

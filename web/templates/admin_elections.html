@@ -1,0 +1,64 @@
+{{template "base.html" .}}
+
+{{define "title"}}My Elections - E-Voting System{{end}}
+
+{{define "content"}}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-poll me-2"></i>My Elections</h2>
+    <span class="badge bg-success fs-6">{{.User.Username}}</span>
+</div>
+
+{{if .Elections}}
+<div class="row">
+    {{range .Elections}}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">{{.Title}}</h6>
+                    {{if eq .Status "draft"}}
+                    <span class="badge bg-secondary">Draft</span>
+                    {{else if eq .Status "active"}}
+                    <span class="badge bg-success">Active</span>
+                    {{else if eq .Status "completed"}}
+                    <span class="badge bg-primary">Completed</span>
+                    {{end}}
+                </div>
+            </div>
+            <div class="card-body">
+                {{if .Description}}
+                <p class="card-text">{{.Description}}</p>
+                {{end}}
+                <small class="text-muted">
+                    <i class="fas fa-calendar me-1"></i>
+                    {{.StartDate.Format "2006-01-02"}} - {{.EndDate.Format "2006-01-02"}}
+                </small>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group w-100" role="group">
+                    <a href="/admin/admin/elections/{{.ID}}/candidates" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-users"></i>
+                    </a>
+                    <a href="/admin/admin/elections/{{.ID}}/tokens" class="btn btn-sm btn-outline-success">
+                        <i class="fas fa-ticket-alt"></i>
+                    </a>
+                    <a href="/admin/admin/elections/{{.ID}}/votes" class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-vote-yea"></i>
+                    </a>
+                    <a href="/admin/admin/elections/{{.ID}}/reports" class="btn btn-sm btn-outline-warning">
+                        <i class="fas fa-chart-bar"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{end}}
+</div>
+{{else}}
+<div class="text-center py-5">
+    <i class="fas fa-poll fa-4x text-muted mb-3"></i>
+    <h4 class="text-muted">No Elections Assigned</h4>
+    <p class="text-muted">Contact the super admin to get assigned to elections.</p>
+</div>
+{{end}}
+{{end}}

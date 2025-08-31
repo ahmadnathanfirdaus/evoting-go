@@ -1,0 +1,219 @@
+{{template "base.html" .}}
+
+{{define "title"}}Home - E-Voting System{{end}}
+
+{{define "extra_css"}}
+<link href="/static/css/public.css" rel="stylesheet">
+{{end}}
+
+{{define "content"}}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100 pt-5">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="hero-title">
+                    Secure Digital Voting
+                </h1>
+                <p class="hero-subtitle">
+                    Experience the future of democracy with our secure, transparent, and accessible e-voting platform. Your voice matters, and we make sure it's heard.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/vote" class="btn-hero btn-hero-primary">
+                        <i class="fas fa-vote-yea"></i>
+                        Cast Your Vote
+                    </a>
+                    <a href="#features" class="btn-hero btn-hero-secondary">
+                        <i class="fas fa-info-circle"></i>
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-5 mt-lg-0">
+                <div class="position-relative">
+                    <div class="card-modern p-4 d-inline-block">
+                        <i class="fas fa-vote-yea display-1 text-primary mb-3"></i>
+                        <h4 class="fw-bold">Secure Voting</h4>
+                        <p class="text-muted mb-0">End-to-end encryption ensures your vote remains private and secure</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="fw-bold mb-3">Why Choose Our E-Voting System?</h2>
+                <p class="lead text-muted">Built with cutting-edge technology to ensure security, transparency, and accessibility for all voters.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card-modern h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-users fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">For Voters</h5>
+                        <p class="text-muted mb-4">Cast your vote securely using your unique voting token. Simple, fast, and completely private.</p>
+                        <a href="/vote" class="btn-hero btn-hero-secondary w-100">
+                            <i class="fas fa-vote-yea"></i>
+                            Vote Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card-modern h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-cog fa-3x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">For Administrators</h5>
+                        <p class="text-muted mb-4">Manage elections, candidates, and monitor voting progress with our comprehensive admin panel.</p>
+                        <a href="/login" class="btn-hero btn-hero-secondary w-100" style="background: var(--gradient-success);">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Admin Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5" style="background: rgba(255, 255, 255, 0.1);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="fw-bold mb-3 text-white">How It Works</h2>
+                <p class="lead text-white-50">Simple steps to participate in secure digital voting</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card-modern text-center h-100">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-ticket-alt fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">1. Get Your Token</h5>
+                        <p class="text-muted">Receive a unique voting token from election administrators. This token ensures your vote is secure and anonymous.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-modern text-center h-100">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-vote-yea fa-2x text-success"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">2. Cast Your Vote</h5>
+                        <p class="text-muted">Use your token to securely vote for your preferred candidate. The process is simple, fast, and completely private.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-modern text-center h-100">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <div class="rounded-circle bg-info bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-chart-bar fa-2x text-info"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">3. View Results</h5>
+                        <p class="text-muted">Results are tallied automatically and displayed transparently. Real-time updates ensure complete transparency.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4 text-white">Secure & Transparent Democracy</h2>
+                <p class="text-white-50 mb-4">
+                    Our e-voting system combines cutting-edge security with user-friendly design to deliver a voting experience that's both secure and accessible. Every vote is encrypted, verified, and counted with complete transparency.
+                </p>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center text-white">
+                            <i class="fas fa-shield-alt text-success me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">End-to-End Encryption</h6>
+                                <small class="text-white-50">Military-grade security</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center text-white">
+                            <i class="fas fa-eye text-info me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">Complete Transparency</h6>
+                                <small class="text-white-50">Open and verifiable</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center text-white">
+                            <i class="fas fa-mobile-alt text-warning me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">Mobile Friendly</h6>
+                                <small class="text-white-50">Vote from anywhere</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center text-white">
+                            <i class="fas fa-clock text-primary me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">Real-time Results</h6>
+                                <small class="text-white-50">Instant vote counting</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-5 mt-lg-0">
+                <div class="card-modern p-5">
+                    <i class="fas fa-shield-alt display-1 text-success mb-4"></i>
+                    <h4 class="fw-bold mb-3">Trusted by Thousands</h4>
+                    <p class="text-muted mb-4">Join the growing number of organizations using our secure e-voting platform for their democratic processes.</p>
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <h3 class="fw-bold text-primary mb-1">99.9%</h3>
+                            <small class="text-muted">Uptime</small>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="fw-bold text-success mb-1">100%</h3>
+                            <small class="text-muted">Secure</small>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="fw-bold text-info mb-1">24/7</h3>
+                            <small class="text-muted">Support</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{{end}}

@@ -1,0 +1,144 @@
+{{template "admin_base.html" .}}
+
+{{define "title"}}Manage Votes - {{.Election.Title}}{{end}}
+
+{{define "breadcrumb"}}
+<li class="breadcrumb-item"><a href="/admin/admin/dashboard">Dashboard</a></li>
+<li class="breadcrumb-item"><a href="/admin/admin/elections">Elections</a></li>
+<li class="breadcrumb-item active">{{.Election.Title}}</li>
+<li class="breadcrumb-item active">Votes</li>
+{{end}}
+
+{{define "content"}}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="fas fa-vote-yea me-2"></i>Manage Votes</h2>
+        <p class="text-muted mb-0">{{.Election.Title}}</p>
+    </div>
+    <button onclick="window.location.reload()" class="btn btn-outline-primary">
+        <i class="fas fa-sync-alt me-2"></i>Refresh
+    </button>
+</div>
+
+<!-- Election Navigation -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="btn-group" role="group">
+            <a href="/admin/admin/elections/{{.Election.ID}}/candidates" class="btn btn-outline-secondary">
+                <i class="fas fa-users me-1"></i>Candidates
+            </a>
+            <a href="/admin/admin/elections/{{.Election.ID}}/tokens" class="btn btn-outline-secondary">
+                <i class="fas fa-ticket-alt me-1"></i>Tokens
+            </a>
+            <a href="/admin/admin/elections/{{.Election.ID}}/votes" class="btn btn-primary">
+                <i class="fas fa-vote-yea me-1"></i>Votes
+            </a>
+            <a href="/admin/admin/elections/{{.Election.ID}}/reports" class="btn btn-outline-secondary">
+                <i class="fas fa-chart-bar me-1"></i>Reports
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Votes List -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Cast Votes</h5>
+        <span class="badge bg-primary">Total: {{len .Votes}}</span>
+    </div>
+    <div class="card-body">
+        {{if .Votes}}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Candidate</th>
+                        <th>Vote Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range $index, $vote := .Votes}}
+                    <tr>
+                        <td>{{add $index 1}}</td>
+                        <td>
+                            <strong>{{$vote.CandidateName}}</strong>
+                        </td>
+                        <td>{{$vote.VotedAt.Format "2006-01-02 15:04:05"}}</td>
+                        <td>
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Valid
+                            </span>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination would go here if needed -->
+        
+        {{else}}
+        <div class="text-center py-5">
+            <i class="fas fa-vote-yea fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Votes Cast Yet</h4>
+            <p class="text-muted">Votes will appear here once people start voting.</p>
+            <div class="mt-3">
+                <a href="/admin/admin/elections/{{.Election.ID}}/tokens" class="btn btn-primary">
+                    <i class="fas fa-ticket-alt me-2"></i>Manage Tokens
+                </a>
+            </div>
+        </div>
+        {{end}}
+    </div>
+</div>
+
+{{if .Votes}}
+<!-- Vote Statistics -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Quick Statistics</h5>
+    </div>
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="border rounded p-3">
+                    <h4 class="text-primary">{{len .Votes}}</h4>
+                    <small class="text-muted">Total Votes</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-3">
+                    <h4 class="text-success">{{len .Votes}}</h4>
+                    <small class="text-muted">Valid Votes</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-3">
+                    <h4 class="text-warning">0</h4>
+                    <small class="text-muted">Invalid Votes</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-3">
+                    <h4 class="text-info">{{printf "%.1f" (div (mul (len .Votes) 100.0) (max (len .Votes) 1))}}%</h4>
+                    <small class="text-muted">Participation</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+<script>
+// Auto-refresh every 30 seconds for active elections
+{{if eq .Election.Status "active"}}
+setInterval(function() {
+    if (!document.hidden) {
+        window.location.reload();
+    }
+}, 30000);
+{{end}}
+</script>
+{{end}}

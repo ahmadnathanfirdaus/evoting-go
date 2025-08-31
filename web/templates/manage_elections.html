@@ -1,0 +1,99 @@
+{{template "admin_base.html" .}}
+
+{{define "title"}}Manage Elections - E-Voting System{{end}}
+
+{{define "breadcrumb"}}
+<li class="breadcrumb-item"><a href="/admin/superadmin/dashboard">Dashboard</a></li>
+<li class="breadcrumb-item active">Elections</li>
+{{end}}
+
+{{define "content"}}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">Elections</h1>
+        <p class="page-subtitle">Manage all elections in the system</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary" onclick="window.location.reload()">
+            <i class="fas fa-sync-alt me-2"></i>Refresh
+        </button>
+        <a href="/admin/superadmin/elections/create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Create Election
+        </a>
+    </div>
+</div>
+
+{{if .Elections}}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">All Elections</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Elections}}
+                    <tr>
+                        <td>
+                            <strong>{{.Title}}</strong>
+                            {{if .Description}}
+                            <br><small class="text-muted">{{.Description}}</small>
+                            {{end}}
+                        </td>
+                        <td>
+                            {{if eq .Status "draft"}}
+                            <span class="badge bg-secondary">Draft</span>
+                            {{else if eq .Status "active"}}
+                            <span class="badge bg-success">Active</span>
+                            {{else if eq .Status "completed"}}
+                            <span class="badge bg-primary">Completed</span>
+                            {{end}}
+                        </td>
+                        <td>{{.StartDate.Format "2006-01-02 15:04"}}</td>
+                        <td>{{.EndDate.Format "2006-01-02 15:04"}}</td>
+                        <td>{{.CreatedAt.Format "2006-01-02"}}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/admin/superadmin/elections/{{.ID}}/edit" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="/admin/superadmin/elections/{{.ID}}/assign-admin" class="btn btn-sm btn-outline-info">
+                                    <i class="fas fa-user-plus"></i>
+                                </a>
+                                <form method="POST" action="/admin/superadmin/elections/{{.ID}}/delete" class="d-inline" 
+                                      onsubmit="return confirm('Are you sure you want to delete this election?')">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{else}}
+<div class="text-center py-5">
+    <i class="fas fa-poll fa-4x text-muted mb-3"></i>
+    <h4 class="text-muted">No Elections Found</h4>
+    <p class="text-muted">Create your first election to get started.</p>
+    <a href="/admin/superadmin/elections/create" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Create Election
+    </a>
+</div>
+{{end}}
+{{end}}

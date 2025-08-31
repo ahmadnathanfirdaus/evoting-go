@@ -1,0 +1,179 @@
+{{template "base.html" .}}
+
+{{define "title"}}Vote Result - E-Voting System{{end}}
+
+{{define "extra_css"}}
+<link href="/static/css/public.css" rel="stylesheet">
+{{end}}
+
+{{define "content"}}
+<div class="vote-container">
+    <div class="vote-card">
+        {{if .Success}}
+        <div class="card-modern fade-in-up text-center">
+            <div class="card-header" style="background: var(--gradient-success);">
+                <i class="fas fa-check-circle fs-1 mb-3"></i>
+                <h4 class="fw-bold">Vote Submitted Successfully!</h4>
+                <p class="mb-0 opacity-75">Your voice has been heard</p>
+            </div>
+
+            <div class="card-body p-5">
+                <div class="mb-4">
+                    <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="fw-bold text-success mb-3">Thank You for Participating!</h5>
+                    <p class="text-muted mb-4">{{.Message}}</p>
+                </div>
+
+                <div class="alert-modern alert-success-modern">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    Your vote has been recorded securely and anonymously. The token has been used and cannot be used again.
+                </div>
+
+                <div class="row g-3 mt-4">
+                    <div class="col-md-6">
+                        <div class="card-modern p-3">
+                            <i class="fas fa-lock text-success mb-2"></i>
+                            <h6 class="fw-bold mb-1">Secure</h6>
+                            <small class="text-muted">Vote encrypted and protected</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-modern p-3">
+                            <i class="fas fa-user-secret text-primary mb-2"></i>
+                            <h6 class="fw-bold mb-1">Anonymous</h6>
+                            <small class="text-muted">Your identity remains private</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="/" class="btn-hero btn-hero-secondary">
+                        <i class="fas fa-home"></i>
+                        Return to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="card-modern fade-in-up text-center">
+            <div class="card-header" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                <i class="fas fa-times-circle fs-1 mb-3"></i>
+                <h4 class="fw-bold">Vote Submission Failed</h4>
+                <p class="mb-0 opacity-75">Unable to process your vote</p>
+            </div>
+
+            <div class="card-body p-5">
+                <div class="mb-4">
+                    <div class="rounded-circle bg-danger bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                        <i class="fas fa-times-circle text-danger" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="fw-bold text-danger mb-3">Unable to Submit Vote</h5>
+                    <p class="text-muted mb-4">{{.Message}}</p>
+                </div>
+
+                <div class="alert-modern alert-danger-modern">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Please contact the election administrator if you believe this is an error, or try again with a valid token.
+                </div>
+
+                <div class="row g-3 mt-4">
+                    <div class="col-md-6">
+                        <a href="/vote" class="btn-hero btn-hero-secondary w-100">
+                            <i class="fas fa-redo"></i>
+                            Try Again
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/" class="btn-hero btn-hero-secondary w-100">
+                            <i class="fas fa-home"></i>
+                            Go Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{end}}
+
+        <!-- Additional Information -->
+        <div class="card-modern mt-4 fade-in">
+            <div class="card-body text-center p-4">
+                <h6 class="fw-bold mb-3">
+                    <i class="fas fa-info-circle text-info me-2"></i>What Happens Next?
+                </h6>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <i class="fas fa-chart-bar text-primary mb-2 d-block"></i>
+                        <small class="text-muted">Results will be tallied automatically</small>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-eye text-success mb-2 d-block"></i>
+                        <small class="text-muted">Transparent counting process</small>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-bell text-warning mb-2 d-block"></i>
+                        <small class="text-muted">Results announced when voting ends</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "extra_js"}}
+<script>
+// Auto-redirect to home after successful vote (optional)
+{{if .Success}}
+setTimeout(() => {
+    if (confirm('Would you like to return to the home page?')) {
+        window.location.href = '/';
+    }
+}, 10000); // 10 seconds
+{{end}}
+
+// Confetti animation for successful vote
+{{if .Success}}
+// Simple confetti effect
+function createConfetti() {
+    const colors = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#3b82f6'];
+    for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.style.cssText = `
+                position: fixed;
+                width: 10px;
+                height: 10px;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                top: -10px;
+                left: ${Math.random() * 100}vw;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                animation: confettiFall 3s linear forwards;
+            `;
+            document.body.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 3000);
+        }, i * 50);
+    }
+}
+
+// Add confetti animation CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes confettiFall {
+        to {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// Trigger confetti
+setTimeout(createConfetti, 500);
+{{end}}
+</script>
+{{end}}

@@ -1,0 +1,93 @@
+{{template "base.html" .}}
+
+{{define "title"}}Assign Admin - {{.Election.Title}}{{end}}
+
+{{define "content"}}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-plus me-2"></i>Assign Admin to Election
+                </h4>
+                <p class="mb-0 mt-2 text-muted">{{.Election.Title}}</p>
+            </div>
+            <div class="card-body">
+                {{if .Error}}
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>{{.Error}}
+                </div>
+                {{end}}
+
+                <!-- Assign New Admin Form -->
+                <div class="mb-4">
+                    <h5>Assign New Admin</h5>
+                    <form method="POST" action="/admin/superadmin/elections/{{.Election.ID}}/assign-admin">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <select class="form-select" name="admin_id" required>
+                                    <option value="">Select Admin to Assign</option>
+                                    {{range .Admins}}
+                                    <option value="{{.ID}}">{{.Username}}</option>
+                                    {{end}}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-plus me-2"></i>Assign Admin
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Currently Assigned Admins -->
+                <div>
+                    <h5>Currently Assigned Admins</h5>
+                    {{if .AssignedAdmins}}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Assigned Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{range .AssignedAdmins}}
+                                <tr>
+                                    <td><strong>{{.Username}}</strong></td>
+                                    <td>
+                                        <span class="badge bg-primary">{{.Role}}</span>
+                                    </td>
+                                    <td>{{.CreatedAt.Format "2006-01-02 15:04"}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger" disabled>
+                                            <i class="fas fa-times"></i> Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                                {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+                    {{else}}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No admins are currently assigned to this election.
+                    </div>
+                    {{end}}
+                </div>
+
+                <div class="mt-4">
+                    <a href="/admin/superadmin/elections" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Elections
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
